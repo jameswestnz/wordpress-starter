@@ -4,7 +4,7 @@ cd ${DIR}
 
 # fix all permissions
 chmod -R 655 .
-chmod -R 644 skel
+chmod -R 600 bin
 
 # remove symlink placeholders and setup symlinks
 ## wordpress
