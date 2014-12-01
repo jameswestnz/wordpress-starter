@@ -1,5 +1,5 @@
 # move to the parent directory
-DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )/../" && pwd )
+DIR=$(readlink -f $(dirname $(dirname “$0”)))
 cd ${DIR}
 
 # reset to latest remote
@@ -10,5 +10,4 @@ git reset --hard origin/master
 git submodule update --init --recursive
 
 # run init
-cd bin
-./init.sh
+bin/init.sh
