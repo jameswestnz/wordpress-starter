@@ -3,9 +3,8 @@ DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )/../" && pwd )
 cd ${DIR}
 
 # fix all permissions
-chmod -R 600 .
+chmod -R 655 .
 chmod -R 644 skel
-chmod -R 655 wp wp-config.php
 
 # remove symlink placeholders and setup symlinks
 ## wordpress
