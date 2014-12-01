@@ -10,4 +10,5 @@ git reset --hard origin/master
 git submodule update --init --recursive
 
 # run init
-sh bin/init.sh
+cd bin
+./init.sh
