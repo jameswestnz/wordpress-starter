@@ -1,5 +1,5 @@
 # move to the parent directory
-DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )/../" && pwd )
+DIR=$(readlink -f $(dirname "$0"))
 cd ${DIR}
 
 # fix all permissions
