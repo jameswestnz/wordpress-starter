@@ -7,9 +7,8 @@ cd ${DIR}
 chmod -R 600 .
 ## need execute on this directory to find real path from symlink
 chmod 601 .
-## allow contents of ./skel to be copied - need read AND execute on directories
-find ./skel -type d -exec chmod 601 {} \;
-find ./skel -type f -exec chmod 604 {} \;
+## allow contents of ./skel to be copied - need read AND execute to perform copy
+chmod -R 605 skel
 ## allow files in ./wp to be read, and folders executed/searched
 find ./wp -type d -exec chmod 601 {} \;
 find ./wp -type f -exec chmod 604 {} \;
