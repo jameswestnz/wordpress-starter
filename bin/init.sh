@@ -3,8 +3,14 @@ DIR=$(readlink -f $(dirname $(dirname “$0”)))
 cd ${DIR}
 
 # fix all permissions
-chmod -R 655 .
-chmod -R 600 bin
+## prevent access to everything by default
+chmod -R 600 .
+## allow contents of ./skel to be copied - need read AND execute on directories
+find ./skel -type d -exec chmod 601 {} \;
+find ./skel -type f -exec chmod 604 {} \;
+## allow files in ./wp to be read, and folders executed/searched
+find ./wp -type d -exec chmod 601 {} \;
+find ./wp -type f -exec chmod 604 {} \;
 
 # remove symlink placeholders and setup symlinks
 ## wordpress
