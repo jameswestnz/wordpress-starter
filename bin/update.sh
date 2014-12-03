@@ -9,5 +9,8 @@ git reset --hard origin/master
 # update all submodules
 git submodule update --init --recursive
 
+# add wp-cli
+curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+
 # run init
 bin/init.sh
