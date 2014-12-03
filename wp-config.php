@@ -3,7 +3,8 @@
  * Set WEB_ROOT to DOCUMENT_ROOT
  * chdir() to ensure all operations begin from this path
  */
-define('WEB_ROOT', $_SERVER['DOCUMENT_ROOT']);
+define('WEB_ROOT', isset($_SERVER['PWD']) ? $_SERVER['PWD'] : $_SERVER['DOCUMENT_ROOT']);
+if(WEB_ROOT == realpath(WEB_ROOT . '/wp')) throw new Exception('Cannot run from ' . WEB_ROOT);
 chdir(WEB_ROOT);
 /**
  * Custom URL paths
@@ -19,7 +20,7 @@ define('WP_CONTENT_URL', WP_HOME . CONTENT_DIR);
 /**
  * Include site-specific config
  */
-require_once WEB_ROOT . '/../wp-config.php';
+if(file_exists(WEB_ROOT . '/../wp-config.php')) require_once WEB_ROOT . '/../wp-config.php';
 /**
  * DB settings
  * $table_prefix is pluggable in case we need it
@@ -45,5 +46,5 @@ if(!defined('WP_HTTP_BLOCK_EXTERNAL')) define('WP_HTTP_BLOCK_EXTERNAL', true);
 /**
  * Bootstrap WordPress
  */
-define('ABSPATH', WEB_ROOT . '/wp/');
+if(!defined('ABSPATH')) define('ABSPATH', WEB_ROOT . '/wp/');
 require_once(ABSPATH . 'wp-settings.php');
