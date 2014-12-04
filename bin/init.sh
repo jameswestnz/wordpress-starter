@@ -14,6 +14,8 @@ find ./wp -type d -exec chmod 601 {} \;
 find ./wp -type f -exec chmod 604 {} \;
 ## and same with our global config
 chmod 604 ./wp-config.php
+## need to be able to use wp-cli
+chmod 604 ./wp-cli.phar
 
 # remove symlink placeholders and setup symlinks
 ## wordpress
