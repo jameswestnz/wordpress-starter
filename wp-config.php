@@ -4,7 +4,7 @@
  * chdir() to ensure all operations begin from this path
  */
 define('WEB_ROOT', isset($_SERVER['PWD']) ? $_SERVER['PWD'] : $_SERVER['DOCUMENT_ROOT']);
-if(WEB_ROOT == realpath(WEB_ROOT . '/wp')) throw new Exception('Cannot run from ' . WEB_ROOT);
+if(WEB_ROOT == realpath(WEB_ROOT . '/wp')) throw new Exception('Cannot run from ' . realpath(WEB_ROOT . '/wp'));
 chdir(WEB_ROOT);
 /**
  * Custom URL paths
@@ -42,7 +42,7 @@ if(!defined('WPLANG')) define('WPLANG', '');
 if(!defined('AUTOMATIC_UPDATER_DISABLED')) define('AUTOMATIC_UPDATER_DISABLED', true);
 if(!defined('DISABLE_WP_CRON')) define('DISABLE_WP_CRON', true);
 if(!defined('DISALLOW_FILE_EDIT')) define('DISALLOW_FILE_EDIT', true);
-if(!defined('WP_HTTP_BLOCK_EXTERNAL')) define('WP_HTTP_BLOCK_EXTERNAL', true);
+//if(!defined('WP_HTTP_BLOCK_EXTERNAL')) define('WP_HTTP_BLOCK_EXTERNAL', true);
 /**
  * Bootstrap WordPress
  */
