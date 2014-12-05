@@ -1,10 +1,32 @@
 <?php
 /**
+ * If CLI...
+ */
+if(php_sapi_name() === 'cli') {
+    $cliopts = getopt(null, ['path:', 'url:']);
+    
+	if(!isset($cliopts['path']) || !isset($cliopts['url'])) {
+		exit('Error: --path and --url are required when running wp-cli.');
+	}
+	
+    if(isset($cliopts['path']) && is_string($cliopts['path'])) {
+    	if($cliopts['path'][0] == '/') {
+        	$_SERVER['DOCUMENT_ROOT'] = $cliopts['path'];
+    	} else if(isset($_SERVER['PWD'])) {
+        	$_SERVER['DOCUMENT_ROOT'] = $_SERVER['PWD'] . DIRECTORY_SEPARATOR . $cliopts['path'];
+    	} else {
+			exit('Error: We could\'nt determine your Wordpress site\'s document root.');
+    	}
+    	$_SERVER['DOCUMENT_ROOT'] = realpath(substr($_SERVER['DOCUMENT_ROOT'], 0, -3));  
+    }
+}
+$globalroot = substr(realpath($_SERVER['DOCUMENT_ROOT'] . '/wp'), 0, -3);
+if($_SERVER['DOCUMENT_ROOT'] == $globalroot) exit('Error: Cannot run from ' . $globalroot);
+/**
  * Set WEB_ROOT to DOCUMENT_ROOT
  * chdir() to ensure all operations begin from this path
  */
-define('WEB_ROOT', isset($_SERVER['PWD']) ? $_SERVER['PWD'] : $_SERVER['DOCUMENT_ROOT']);
-if(WEB_ROOT == realpath(WEB_ROOT . '/wp')) throw new Exception('Cannot run from ' . realpath(WEB_ROOT . '/wp'));
+define('WEB_ROOT', $_SERVER['DOCUMENT_ROOT']);
 chdir(WEB_ROOT);
 /**
  * Custom URL paths
