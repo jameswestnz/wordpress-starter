@@ -2,26 +2,24 @@
 /**
  * If CLI...
  */
-if(php_sapi_name() === 'cli') {
-    $cliopts = getopt(null, ['path:', 'url:']);
-    
-	if(!isset($cliopts['path']) || !isset($cliopts['url'])) {
-		exit('Error: --path and --url are required when running wp-cli.');
-	}
+if(defined('WP_CLI') && WP_CLI === true) {
+	$runner = WP_CLI::get_runner();
 	
-    if(isset($cliopts['path']) && is_string($cliopts['path'])) {
-    	if($cliopts['path'][0] == '/') {
-        	$_SERVER['DOCUMENT_ROOT'] = $cliopts['path'];
-    	} else if(isset($_SERVER['PWD'])) {
-        	$_SERVER['DOCUMENT_ROOT'] = $_SERVER['PWD'] . DIRECTORY_SEPARATOR . $cliopts['path'];
-    	} else {
-			exit('Error: We could\'nt determine your Wordpress site\'s document root.');
-    	}
-    	$_SERVER['DOCUMENT_ROOT'] = realpath(substr($_SERVER['DOCUMENT_ROOT'], 0, -3));  
-    }
+	// check vars
+	if(!isset($runner->config['url']) || empty($runner->config['url'])) exit("Error: --url is required.\n");
+	if(!isset($runner->config['path']) || empty($runner->config['path'])) exit("Error: --path is required.\n");
+	
+	if(\WP_CLI\Utils\is_path_absolute($runner->config['path'])) {
+    	$_SERVER['DOCUMENT_ROOT'] = $runner->config['path'];
+	} else if(isset($_SERVER['PWD'])) {
+    	$_SERVER['DOCUMENT_ROOT'] = $_SERVER['PWD'] . DIRECTORY_SEPARATOR . $runner->config['path'];
+	} else {
+		exit("Error: We couldn't determine your Wordpress site's document root.");
+	}
+	$_SERVER['DOCUMENT_ROOT'] = substr($_SERVER['DOCUMENT_ROOT'], 0, -3);
 }
-$globalroot = substr(realpath($_SERVER['DOCUMENT_ROOT'] . '/wp'), 0, -3);
-if($_SERVER['DOCUMENT_ROOT'] == $globalroot) exit('Error: Cannot run from ' . $globalroot);
+$globalroot = substr(realpath($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'wp'), 0, -3);
+if($_SERVER['DOCUMENT_ROOT'] == $globalroot) exit("Error: Cannot run from $globalroot.\n");
 /**
  * Set WEB_ROOT to DOCUMENT_ROOT
  * chdir() to ensure all operations begin from this path
